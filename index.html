@@ -2,6 +2,94 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        function isCrossOriginOrExtensionError(msg, source, err) {
+          var text = String(msg || '') + ' ' + String(source || '') + ' ' + String((err && (err.message || err.stack)) || '');
+          return (
+            text.indexOf('chrome-extension://') !== -1 ||
+            text.indexOf('moz-extension://') !== -1 ||
+            text.indexOf('safari-extension://') !== -1 ||
+            text.indexOf("Failed to read a named property 'origin' from 'Location'") !== -1 ||
+            text.indexOf('Blocked a frame with origin') !== -1
+          );
+        }
+
+        window.addEventListener(
+          'error',
+          function (event) {
+            if (isCrossOriginOrExtensionError(event.message, event.filename, event.error)) {
+              event.stopImmediatePropagation();
+              event.preventDefault();
+              return false;
+            }
+          },
+          true
+        );
+
+        window.addEventListener(
+          'unhandledrejection',
+          function (event) {
+            var reason = event.reason;
+            if (isCrossOriginOrExtensionError(reason && reason.message, '', reason)) {
+              event.stopImmediatePropagation();
+              event.preventDefault();
+              return false;
+            }
+          },
+          true
+        );
+
+        var origAddEventListener = window.addEventListener.bind(window);
+        window.addEventListener = function (type, listener, options) {
+          if (type === 'error' && typeof listener === 'function') {
+            var wrappedError = function (event) {
+              if (isCrossOriginOrExtensionError(event.message, event.filename, event.error)) {
+                return;
+              }
+              return listener.call(this, event);
+            };
+            return origAddEventListener(type, wrappedError, options);
+          }
+          if (type === 'unhandledrejection' && typeof listener === 'function') {
+            var wrappedRejection = function (event) {
+              var reason = event.reason;
+              if (isCrossOriginOrExtensionError(reason && reason.message, '', reason)) {
+                return;
+              }
+              return listener.call(this, event);
+            };
+            return origAddEventListener(type, wrappedRejection, options);
+          }
+          return origAddEventListener(type, listener, options);
+        };
+
+        var currentOnError = null;
+        try {
+          Object.defineProperty(window, 'onerror', {
+            configurable: true,
+            enumerable: true,
+            get: function () {
+              return currentOnError;
+            },
+            set: function (fn) {
+              if (typeof fn !== 'function') {
+                currentOnError = fn;
+                return;
+              }
+              currentOnError = function (message, source, lineno, colno, error) {
+                if (isCrossOriginOrExtensionError(message, source, error)) {
+                  return true;
+                }
+                return fn.apply(this, arguments);
+              };
+            },
+          });
+        } catch (_e) {
+          // Ignore if onerror is non-configurable in this environment
+        }
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VaultGuard — AI-Powered Treasury Security on NEAR</title>
     <meta

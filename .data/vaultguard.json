@@ -27,7 +27,7 @@
     "policyContractAccount": "policy-guard.vaultguard.testnet",
     "emergencyPaused": false,
     "maxSlippageBps": 50,
-    "updatedAt": "2026-11-11T14:50:57.165Z"
+    "updatedAt": "2026-11-11T15:07:16.682Z"
   },
   "agentKey": {
     "publicKey": "ed25519:VGAgentRestrictedFCK9x8A7b6C5d4E3f2G1h0J9k8L7m6N",
@@ -123,7 +123,7 @@
       "proofOfWorkRef": "https://github.com/acme-dev-labs/near-intents-sdk/pull/42",
       "paymentDeadline": "2026-11-12",
       "invoiceHash": "07782d36adfaeb35855168c6a4ae9b9165d462e839b216e995466f93fdbe720d",
-      "encryptedDocumentCiphertext": "7ed0d9da6f3d7d5cd473538c:ad2ffd608ea5e69be9b6009d973de643:bd6ce220f46a93c09902da3ba90a1ac8bc7c37827d6f95f7f933320e839d",
+      "encryptedDocumentCiphertext": "858980ed5e73f8c034b958f4:8af8f6addfc620cf46f481f28619eee7:1bb11456a47f95404fa9bf14f2ed070b4734ccc2a5f5b2fdd0c3eade3e99",
       "state": "REJECTED",
       "rejectionCode": "ERR_POLICY_SPEND_LIMIT_EXCEEDED",
       "rejectionReason": "Prompt injection detected and blocked; requested amount (10000.00 USDC) exceeds single-invoice maximum (500.00 USDC).",
@@ -168,10 +168,10 @@
       "proofOfWorkRef": "https://github.com/zk-security-dao/vault-audit/pull/19",
       "paymentDeadline": "2026-11-22",
       "invoiceHash": "c429fae37b2a1cc5796b83b92107422e981a25d3b86be5bfe696fb40fc706c2f",
-      "encryptedDocumentCiphertext": "54c8c25138b1c11c2156ce30:e1be575973b6f99a9cbbe6b191dd0830:0706a6fe6b207ab9dccac92100236d42ddc72d8395673b58f27f586f1c863112c67b65d8b2ad1cec",
+      "encryptedDocumentCiphertext": "6a2b21eb4f58b33dd8e32176:42b6940269a430f37af32cf77e84c353:ab02dd08cc8455f5f6ac0b112bf54722498ce885471449e1bc031aff2b1ba1180630735e03c2d1af",
       "state": "RESERVED",
       "createdAt": "2026-11-11T01:10:00.000Z",
-      "updatedAt": "2026-11-11T14:50:57.166Z",
+      "updatedAt": "2026-11-11T15:07:16.682Z",
       "aiVerification": {
         "invoice_id": "INV-002",
         "vendor_id": "VENDOR-002",
@@ -213,19 +213,19 @@
           "destination_chain": "arbitrum",
           "recipient": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
           "policy_version": 1,
-          "timestamp": 1794408657164,
-          "expires_at": 1794409557164,
-          "nonce": "nonce-INV-002-190136dd26bfde64",
+          "timestamp": 1794409636681,
+          "expires_at": 1794410536681,
+          "nonce": "nonce-INV-002-cdc1a232b1929673",
           "verifier_id": "verifier-node-01.vaultguard.testnet",
           "tee_hardware_verified": false,
           "evidence_source": "trusted_verifier_ed25519"
         },
-        "canonical_bytes_hex": "646f6d61696e3a5641554c5447554152445f4154544553544154494f4e5f56317c76657273696f6e3a312e307c696e766f6963655f69643a494e562d3030327c696e766f6963655f686173683a633432396661653337623261316363353739366238336239323130373432326539383161323564336238366265356266653639366662343066633730366332667c76656e646f725f69643a56454e444f522d3030327c616d6f756e745f626173655f756e6974733a3332303030303030307c746f6b656e3a555344437c64657374696e6174696f6e5f636861696e3a617262697472756d7c726563697069656e743a3078334334344364446442366139303066613262353835646432393965303364313246413432393342437c706f6c6963795f76657273696f6e3a317c74696d657374616d703a313739343430383635373136347c657870697265735f61743a313739343430393535373136347c6e6f6e63653a6e6f6e63652d494e562d3030322d313930313336646432366266646536347c76657269666965725f69643a76657269666965722d6e6f64652d30312e7661756c7467756172642e746573746e65747c7465655f68617264776172655f76657269666965643a66616c73657c65766964656e63655f736f757263653a747275737465645f76657269666965725f65643235353139",
-        "payload_sha256": "4cf2ac7dae495544330e6dde051bc70e435fac3215403ca1b27934eb367c900b",
-        "signature_hex": "6ff9cbdc3093501add547d1c0f27e07b494c2e75815b9f909f23d75ae150e01a230969198148454adb1e5d065891d34137c413113e1fecc171cdba9e63760709",
+        "canonical_bytes_hex": "646f6d61696e3a5641554c5447554152445f4154544553544154494f4e5f56317c76657273696f6e3a312e307c696e766f6963655f69643a494e562d3030327c696e766f6963655f686173683a633432396661653337623261316363353739366238336239323130373432326539383161323564336238366265356266653639366662343066633730366332667c76656e646f725f69643a56454e444f522d3030327c616d6f756e745f626173655f756e6974733a3332303030303030307c746f6b656e3a555344437c64657374696e6174696f6e5f636861696e3a617262697472756d7c726563697069656e743a3078334334344364446442366139303066613262353835646432393965303364313246413432393342437c706f6c6963795f76657273696f6e3a317c74696d657374616d703a313739343430393633363638317c657870697265735f61743a313739343431303533363638317c6e6f6e63653a6e6f6e63652d494e562d3030322d636463316132333262313932393637337c76657269666965725f69643a76657269666965722d6e6f64652d30312e7661756c7467756172642e746573746e65747c7465655f68617264776172655f76657269666965643a66616c73657c65766964656e63655f736f757263653a747275737465645f76657269666965725f65643235353139",
+        "payload_sha256": "f8a20a8ae7aaf5e845cbd9292b41bdc60b3172e99b62e36d6352ba3ea7ac7c98",
+        "signature_hex": "232b90e6bfd5445c3f9787ace4676865bc01f8b9fcb340b10b3dcc2ce14f167b9838da42441a8c0d49717dd4fc023ce340de9bc4f7f6b644e136e77bfe11d302",
         "signer_public_key_hex": "c945e59c9c87801b67d0fbc5f8655f2eea151d38ba4bd41847774101869785ad"
       },
-      "reservationId": "RES-INV-002-9b6066f2"
+      "reservationId": "RES-INV-002-73b0461e"
     },
     {
       "id": "INV-001",
@@ -242,10 +242,10 @@
       "proofOfWorkRef": "https://github.com/acme-dev-labs/near-intents-sdk/pull/42",
       "paymentDeadline": "2026-11-20",
       "invoiceHash": "cc01a9ac56694b98c825cfbdfa2fe1af385ac843edbc831d7b8b1d2d474554dd",
-      "encryptedDocumentCiphertext": "2e594f7f861e2dd88c022d75:f464baffa7870d5709b197c0b43be463:5a78d8fad071f4ac831d89b80cb7111b07ef408d08606f6494fde70d1e97953a72fd4443c14576a4",
+      "encryptedDocumentCiphertext": "b2b57b8abbfb9530b92ff23e:8aac82347a5849255bd2658962ac30cb:465bed293ca9bc8ed1b44faeb518274f465f184657cb5b06572e95e990dbb3add3d670a1218fe290",
       "state": "SETTLED",
       "createdAt": "2026-11-10T14:20:00.000Z",
-      "updatedAt": "2026-11-11T14:50:57.163Z",
+      "updatedAt": "2026-11-11T15:07:16.679Z",
       "aiVerification": {
         "invoice_id": "INV-001",
         "vendor_id": "VENDOR-001",
@@ -287,61 +287,61 @@
           "destination_chain": "base",
           "recipient": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
           "policy_version": 1,
-          "timestamp": 1794408657143,
-          "expires_at": 1794409557143,
-          "nonce": "nonce-INV-001-0fd22444c5d14c3d",
+          "timestamp": 1794409636655,
+          "expires_at": 1794410536655,
+          "nonce": "nonce-INV-001-3d65b3795367816e",
           "verifier_id": "verifier-node-01.vaultguard.testnet",
           "tee_hardware_verified": false,
           "evidence_source": "trusted_verifier_ed25519"
         },
-        "canonical_bytes_hex": "646f6d61696e3a5641554c5447554152445f4154544553544154494f4e5f56317c76657273696f6e3a312e307c696e766f6963655f69643a494e562d3030317c696e766f6963655f686173683a636330316139616335363639346239386338323563666264666132666531616633383561633834336564626338333164376238623164326434373435353464647c76656e646f725f69643a56454e444f522d3030317c616d6f756e745f626173655f756e6974733a3235303030303030307c746f6b656e3a555344437c64657374696e6174696f6e5f636861696e3a626173657c726563697069656e743a3078373143393539313145396135443333306634443632313834324543323433454531333433323932657c706f6c6963795f76657273696f6e3a317c74696d657374616d703a313739343430383635373134337c657870697265735f61743a313739343430393535373134337c6e6f6e63653a6e6f6e63652d494e562d3030312d306664323234343463356431346333647c76657269666965725f69643a76657269666965722d6e6f64652d30312e7661756c7467756172642e746573746e65747c7465655f68617264776172655f76657269666965643a66616c73657c65766964656e63655f736f757263653a747275737465645f76657269666965725f65643235353139",
-        "payload_sha256": "63a832adead72a95c80235db543f2e76c3c256a4fda36690d061f412c1bae2cb",
-        "signature_hex": "f028076cab84465d3afecf9b7c194f1eccc21d78b3eecc09636c890cc860abf4e1766d68597e0debf476af8b5ccae2f26dad1cb19c5ba55c3c8a98c7ac746b08",
+        "canonical_bytes_hex": "646f6d61696e3a5641554c5447554152445f4154544553544154494f4e5f56317c76657273696f6e3a312e307c696e766f6963655f69643a494e562d3030317c696e766f6963655f686173683a636330316139616335363639346239386338323563666264666132666531616633383561633834336564626338333164376238623164326434373435353464647c76656e646f725f69643a56454e444f522d3030317c616d6f756e745f626173655f756e6974733a3235303030303030307c746f6b656e3a555344437c64657374696e6174696f6e5f636861696e3a626173657c726563697069656e743a3078373143393539313145396135443333306634443632313834324543323433454531333433323932657c706f6c6963795f76657273696f6e3a317c74696d657374616d703a313739343430393633363635357c657870697265735f61743a313739343431303533363635357c6e6f6e63653a6e6f6e63652d494e562d3030312d336436356233373935333637383136657c76657269666965725f69643a76657269666965722d6e6f64652d30312e7661756c7467756172642e746573746e65747c7465655f68617264776172655f76657269666965643a66616c73657c65766964656e63655f736f757263653a747275737465645f76657269666965725f65643235353139",
+        "payload_sha256": "31cf7d37f1fca1ec4c3db0b9df108b57eec3dfb8d5570a93383cdf21ac21ecba",
+        "signature_hex": "583b3ea523aa112929f41e1c4177ba2bc56fd90ecb9ecbfd640b25788d4fe8dd4350c1e9e9c27c19ab1fdf720666c4843ed8617a4cda5d5969561728a0c58402",
         "signer_public_key_hex": "c945e59c9c87801b67d0fbc5f8655f2eea151d38ba4bd41847774101869785ad"
       },
-      "reservationId": "RES-INV-001-7f4395dd",
-      "settlementId": "SET-INV-001-794bfb59"
+      "reservationId": "RES-INV-001-d35e8a3c",
+      "settlementId": "SET-INV-001-319939cd"
     }
   ],
   "reservations": [
     {
-      "reservationId": "RES-INV-001-7f4395dd",
+      "reservationId": "RES-INV-001-d35e8a3c",
       "invoiceId": "INV-001",
       "vendorId": "VENDOR-001",
       "amountBaseUnits": "250000000",
       "token": "USDC",
       "destinationChain": "base",
       "recipient": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
-      "attestationNonce": "nonce-INV-001-0fd22444c5d14c3d",
-      "executionNonce": "exec-INV-001-9f92161f8c5c",
+      "attestationNonce": "nonce-INV-001-3d65b3795367816e",
+      "executionNonce": "exec-INV-001-05b400bf3100",
       "policyVersion": 1,
       "status": "CONSUMED",
-      "createdAt": 1794408657158,
-      "expiresAt": 1794410457158
+      "createdAt": 1794409636674,
+      "expiresAt": 1794411436674
     },
     {
-      "reservationId": "RES-INV-002-9b6066f2",
+      "reservationId": "RES-INV-002-73b0461e",
       "invoiceId": "INV-002",
       "vendorId": "VENDOR-002",
       "amountBaseUnits": "320000000",
       "token": "USDC",
       "destinationChain": "arbitrum",
       "recipient": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-      "attestationNonce": "nonce-INV-002-190136dd26bfde64",
-      "executionNonce": "exec-INV-002-36525710b96d",
+      "attestationNonce": "nonce-INV-002-cdc1a232b1929673",
+      "executionNonce": "exec-INV-002-5b41ef2c06fd",
       "policyVersion": 1,
       "status": "ACTIVE",
-      "createdAt": 1794408657165,
-      "expiresAt": 1794410457165
+      "createdAt": 1794409636682,
+      "expiresAt": 1794411436682
     }
   ],
   "quotes": [],
   "settlements": [
     {
-      "settlementId": "SET-INV-001-794bfb59",
+      "settlementId": "SET-INV-001-319939cd",
       "invoiceId": "INV-001",
-      "reservationId": "RES-INV-001-7f4395dd",
-      "quoteId": "QT-INV-001-805c68e2",
+      "reservationId": "RES-INV-001-d35e8a3c",
+      "quoteId": "QT-INV-001-ea77edb7",
       "state": "SETTLED",
       "paymentMode": "simulation",
       "sourceAsset": "USDC",
@@ -349,13 +349,13 @@
       "destinationToken": "USDC",
       "amountBaseUnits": "250000000",
       "recipient": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
-      "depositAddress": "1click-d6071ef2d80228c11c218fa7.intents.near",
-      "nearDepositTxHash": "sim-near-deposit-442a895b8fc3c9f5b4063754a24be136",
-      "destinationTxHash": "sim-dest-tx-base-3c29a6a6fa64637468da07b47caa641b",
+      "depositAddress": "1click-5b159fb669609b577156593a.intents.near",
+      "nearDepositTxHash": "sim-near-deposit-477bc1b2369f907a1a0a0f9150bab347",
+      "destinationTxHash": "sim-dest-tx-base-4d8db105c306dea746420c46f7228463",
       "destinationVerified": true,
       "humanAuthorizedBy": null,
-      "createdAt": "2026-11-11T14:50:57.162Z",
-      "updatedAt": "2026-11-11T14:50:57.162Z"
+      "createdAt": "2026-11-11T15:07:16.678Z",
+      "updatedAt": "2026-11-11T15:07:16.678Z"
     }
   ],
   "auditEvents": [
@@ -368,15 +368,15 @@
       "destinationChain": "arbitrum",
       "recipient": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
       "policyVersion": 1,
-      "attestationNonce": "nonce-INV-002-190136dd26bfde64",
-      "reservationId": "RES-INV-002-9b6066f2",
+      "attestationNonce": "nonce-INV-002-cdc1a232b1929673",
+      "reservationId": "RES-INV-002-73b0461e",
       "settlementState": "RESERVED",
       "txHash": null,
       "paymentMode": "simulation",
       "action": "ONCHAIN_POLICY_APPROVED_AND_RESERVED",
       "actor": "policy-guard.vaultguard.testnet",
-      "id": "AUD-0006-d518",
-      "timestamp": "2026-11-11T14:50:57.166Z"
+      "id": "AUD-0006-2e17",
+      "timestamp": "2026-11-11T15:07:16.682Z"
     },
     {
       "invoiceId": "INV-002",
@@ -387,15 +387,15 @@
       "destinationChain": "arbitrum",
       "recipient": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
       "policyVersion": 1,
-      "attestationNonce": "nonce-INV-002-190136dd26bfde64",
+      "attestationNonce": "nonce-INV-002-cdc1a232b1929673",
       "reservationId": null,
       "settlementState": "VERIFICATION_PENDING",
       "txHash": null,
       "paymentMode": "simulation",
       "action": "AI_AND_EVIDENCE_VERIFIED (APPROVE)",
       "actor": "verifier-node-01.vaultguard.testnet",
-      "id": "AUD-0005-27fd",
-      "timestamp": "2026-11-11T14:50:57.165Z"
+      "id": "AUD-0005-621a",
+      "timestamp": "2026-11-11T15:07:16.681Z"
     },
     {
       "invoiceId": "INV-001",
@@ -406,15 +406,15 @@
       "destinationChain": "base",
       "recipient": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
       "policyVersion": 1,
-      "attestationNonce": "nonce-INV-001-0fd22444c5d14c3d",
-      "reservationId": "RES-INV-001-7f4395dd",
+      "attestationNonce": "nonce-INV-001-3d65b3795367816e",
+      "reservationId": "RES-INV-001-d35e8a3c",
       "settlementState": "SETTLED",
-      "txHash": "sim-dest-tx-base-3c29a6a6fa64637468da07b47caa641b",
+      "txHash": "sim-dest-tx-base-4d8db105c306dea746420c46f7228463",
       "paymentMode": "simulation",
       "action": "NEAR_INTENTS_SETTLEMENT_SETTLED",
       "actor": "ai-executor.vaultguard.testnet",
-      "id": "AUD-0004-f8ab",
-      "timestamp": "2026-11-11T14:50:57.163Z"
+      "id": "AUD-0004-4030",
+      "timestamp": "2026-11-11T15:07:16.679Z"
     },
     {
       "invoiceId": "INV-001",
@@ -425,15 +425,15 @@
       "destinationChain": "base",
       "recipient": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
       "policyVersion": 1,
-      "attestationNonce": "nonce-INV-001-0fd22444c5d14c3d",
-      "reservationId": "RES-INV-001-7f4395dd",
+      "attestationNonce": "nonce-INV-001-3d65b3795367816e",
+      "reservationId": "RES-INV-001-d35e8a3c",
       "settlementState": "RESERVED",
       "txHash": null,
       "paymentMode": "simulation",
       "action": "ONCHAIN_POLICY_APPROVED_AND_RESERVED",
       "actor": "policy-guard.vaultguard.testnet",
-      "id": "AUD-0003-fa3b",
-      "timestamp": "2026-11-11T14:50:57.160Z"
+      "id": "AUD-0003-70e5",
+      "timestamp": "2026-11-11T15:07:16.676Z"
     },
     {
       "invoiceId": "INV-001",
@@ -444,15 +444,15 @@
       "destinationChain": "base",
       "recipient": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
       "policyVersion": 1,
-      "attestationNonce": "nonce-INV-001-0fd22444c5d14c3d",
+      "attestationNonce": "nonce-INV-001-3d65b3795367816e",
       "reservationId": null,
       "settlementState": "VERIFICATION_PENDING",
       "txHash": null,
       "paymentMode": "simulation",
       "action": "AI_AND_EVIDENCE_VERIFIED (APPROVE)",
       "actor": "verifier-node-01.vaultguard.testnet",
-      "id": "AUD-0002-bf43",
-      "timestamp": "2026-11-11T14:50:57.145Z"
+      "id": "AUD-0002-cfc2",
+      "timestamp": "2026-11-11T15:07:16.658Z"
     },
     {
       "invoiceId": "INV-ATTACK-01",
@@ -470,8 +470,8 @@
       "paymentMode": "simulation",
       "action": "POLICY_REJECTED_MALICIOUS_INVOICE",
       "actor": "policy-guard.vaultguard.testnet",
-      "id": "AUD-0001-6d36",
-      "timestamp": "2026-11-11T14:50:57.137Z"
+      "id": "AUD-0001-8e52",
+      "timestamp": "2026-11-11T15:07:16.648Z"
     }
   ],
   "securityEvents": [
@@ -492,25 +492,25 @@
       "accountId": "admin.vaultguard.testnet",
       "role": "TREASURY_ADMIN",
       "publicKey": "ed25519:AdminMasterKey8f9d2a1b4c5e6f708192a3b4c5d6e7f8",
-      "lastAuthenticatedAt": "2026-11-11T14:50:57.133Z"
+      "lastAuthenticatedAt": "2026-11-11T15:07:16.645Z"
     },
     {
       "accountId": "operator.vaultguard.testnet",
       "role": "FINANCE_OPERATOR",
       "publicKey": "ed25519:OperatorKey3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f",
-      "lastAuthenticatedAt": "2026-11-11T14:50:57.133Z"
+      "lastAuthenticatedAt": "2026-11-11T15:07:16.645Z"
     },
     {
       "accountId": "ai-executor.vaultguard.testnet",
       "role": "AI_AGENT",
       "publicKey": "ed25519:VGAgentRestrictedFCK9x8A7b6C5d4E3f2G1h0J9k8L7m6N",
-      "lastAuthenticatedAt": "2026-11-11T14:50:57.133Z"
+      "lastAuthenticatedAt": "2026-11-11T15:07:16.645Z"
     },
     {
       "accountId": "auditor.vaultguard.testnet",
       "role": "AUDITOR",
       "publicKey": "ed25519:AuditorReadOnlyKey9a8b7c6d5e4f3a2b1c0d9e8f",
-      "lastAuthenticatedAt": "2026-11-11T14:50:57.133Z"
+      "lastAuthenticatedAt": "2026-11-11T15:07:16.645Z"
     }
   ]
 }
