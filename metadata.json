@@ -1,0 +1,6 @@
+{
+  "name": "VaultGuard",
+  "description": "AI-Powered Treasury Security, Private Invoice Verification, Cryptographic Spending Controls, and NEAR Intents Cross-Chain Settlement.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
