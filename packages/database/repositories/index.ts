@@ -792,16 +792,23 @@ export class VaultGuardRepository {
   public registerUser(params: {
     name: string;
     email: string;
-    accountId: string;
+    accountId?: string;
     password: string;
     role?: 'FINANCE_OPERATOR' | 'AUDITOR';
   }): AuthenticatedAccountProfile {
     const cleanEmail = params.email.trim().toLowerCase();
-    const cleanAccount = params.accountId.trim().toLowerCase();
-    if (!cleanEmail || !cleanAccount || params.password.length < 6) {
+    const emailPrefix = cleanEmail
+      .split('@')[0]
+      .replace(/[^a-z0-9_-]/g, '')
+      .slice(0, 20) || `user${this.users.length + 1}`;
+    const cleanAccount =
+      params.accountId && params.accountId.trim().length > 0
+        ? params.accountId.trim().toLowerCase()
+        : `${emailPrefix}.vaultguard.testnet`;
+    if (!cleanEmail || params.password.length < 6) {
       throw new VaultGuardError(
         ErrorCode.ERR_INVALID_INVOICE,
-        'Name, email, NEAR account ID, and a password of at least 6 characters are required.',
+        'Name, email, and a password of at least 6 characters are required.',
         400
       );
     }

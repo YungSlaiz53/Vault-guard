@@ -20,7 +20,6 @@ export const AuthViews: React.FC<AuthViewsProps> = ({
   // Register Form State
   const [regName, setRegName] = useState('');
   const [regEmail, setRegEmail] = useState('');
-  const [regAccount, setRegAccount] = useState('');
   const [regRole, setRegRole] = useState<'FINANCE_OPERATOR' | 'AUDITOR'>('FINANCE_OPERATOR');
   const [regPassword, setRegPassword] = useState('');
 
@@ -65,12 +64,11 @@ export const AuthViews: React.FC<AuthViewsProps> = ({
         body: JSON.stringify({
           name: regName,
           email: regEmail,
-          accountId: regAccount,
           password: regPassword,
           role: regRole,
         }),
       });
-      setSuccessMsg(`Registered & bound NEAR key for ${res.user.accountId}`);
+      setSuccessMsg(`Registered account for ${res.user.email}`);
       onAuthenticated(res.user);
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'Registration failed');
@@ -145,7 +143,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({
             <div className="space-y-3 text-xs">
               <div>
                 <label htmlFor="auth-login-id" className="block text-[#B4A8D4] mb-1">
-                  Username, Email, or NEAR Account ID
+                  Username or Email
                 </label>
                 <input
                   id="auth-login-id"
@@ -204,12 +202,12 @@ export const AuthViews: React.FC<AuthViewsProps> = ({
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 text-[11px] font-mono text-purple-300">
                 <UserPlus className="w-3.5 h-3.5" />
-                <span>NEW NEAR WORKSPACE REGISTRATION</span>
+                <span>NEW WORKSPACE REGISTRATION</span>
               </div>
               <h2 className="text-xl font-bold text-white">Create VaultGuard Account</h2>
               <p className="text-xs text-[#A89EC4]">
-                Register an operator or compliance auditor identity and automatically provision an
-                Ed25519 session public key.
+                Register an operator or compliance auditor identity to access the VaultGuard
+                dashboard.
               </p>
             </div>
 
@@ -244,38 +242,21 @@ export const AuthViews: React.FC<AuthViewsProps> = ({
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <div>
-                  <label htmlFor="reg-account" className="block text-[#B4A8D4] mb-1">
-                    NEAR Testnet Account ID
-                  </label>
-                  <input
-                    id="reg-account"
-                    type="text"
-                    required
-                    placeholder="aria.vaultguard.testnet"
-                    value={regAccount}
-                    onChange={(e) => setRegAccount(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-[#070312] border border-purple-400/25 text-white font-mono"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="reg-role" className="block text-[#B4A8D4] mb-1">
-                    Workspace Role
-                  </label>
-                  <select
-                    id="reg-role"
-                    value={regRole}
-                    onChange={(e) =>
-                      setRegRole(e.target.value as 'FINANCE_OPERATOR' | 'AUDITOR')
-                    }
-                    className="w-full px-3 py-2 rounded-xl bg-[#070312] border border-purple-400/25 text-white font-mono"
-                  >
-                    <option value="FINANCE_OPERATOR">FINANCE_OPERATOR</option>
-                    <option value="AUDITOR">AUDITOR (Read-Only)</option>
-                  </select>
-                </div>
+              <div>
+                <label htmlFor="reg-role" className="block text-[#B4A8D4] mb-1">
+                  Workspace Role
+                </label>
+                <select
+                  id="reg-role"
+                  value={regRole}
+                  onChange={(e) =>
+                    setRegRole(e.target.value as 'FINANCE_OPERATOR' | 'AUDITOR')
+                  }
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#070312] border border-purple-400/25 text-white font-mono"
+                >
+                  <option value="FINANCE_OPERATOR">FINANCE_OPERATOR</option>
+                  <option value="AUDITOR">AUDITOR (Read-Only)</option>
+                </select>
               </div>
 
               <div>
@@ -300,7 +281,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({
               disabled={busy}
               className="vg-btn-primary w-full py-2.5 px-4 rounded-xl text-xs font-semibold cursor-pointer"
             >
-              {busy ? 'Provisioning NEAR Identity...' : 'Register & Enter Dashboard'}
+              {busy ? 'Creating Account...' : 'Register & Enter Dashboard'}
             </button>
           </form>
         )}
