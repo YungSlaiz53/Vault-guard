@@ -69,6 +69,50 @@ app.get('/api/health', async (_req: Request, res: Response) => {
   });
 });
 
+// Authentication & Identity Endpoints (Operator Login, Registration & Unique Admin Vault Login)
+app.post('/api/auth/login', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const repo = await getVaultGuardRepository();
+    const { identifier, password } = req.body || {};
+    const user = repo.authenticateUser(String(identifier || ''), String(password || ''));
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/auth/register', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const repo = await getVaultGuardRepository();
+    const { name, email, accountId, password, role } = req.body || {};
+    const user = repo.registerUser({
+      name: String(name || ''),
+      email: String(email || ''),
+      accountId: String(accountId || ''),
+      password: String(password || ''),
+      role: role === 'AUDITOR' ? 'AUDITOR' : 'FINANCE_OPERATOR',
+    });
+    res.status(201).json({ user });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/auth/admin-login', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const repo = await getVaultGuardRepository();
+    const { identifier, password, clearanceCode } = req.body || {};
+    const user = repo.authenticateAdmin({
+      identifier: String(identifier || ''),
+      password: String(password || ''),
+      clearanceCode: String(clearanceCode || ''),
+    });
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Invoices Endpoints
 app.get('/api/invoices', async (_req: Request, res: Response, next: NextFunction) => {
   try {

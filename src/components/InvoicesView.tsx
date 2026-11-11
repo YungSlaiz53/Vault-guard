@@ -164,15 +164,15 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Invoice Submission Form */}
-        <div className="lg:col-span-5 bg-[#171D1B] border border-white/[0.08] rounded-lg p-6 space-y-5">
+        <div className="lg:col-span-5 vg-card p-6 space-y-5">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-base font-semibold text-white">Submit Vendor Invoice</h2>
-              <p className="text-xs text-[#A7B0AC]">
+              <p className="text-xs text-slate-400">
                 Encrypted offchain with AES-256-GCM · Only SHA-256 hash anchored on NEAR
               </p>
             </div>
-            <Upload className="w-4 h-4 text-[#00EC97]" />
+            <Upload className="w-4 h-4 text-indigo-400" />
           </div>
 
           {/* Preset Test Scenario Loaders */}
@@ -180,14 +180,14 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
             <button
               type="button"
               onClick={loadPresetValidInvoice}
-              className="px-3 py-1.5 text-xs font-medium bg-[#202824] hover:bg-[#28322D] text-[#00EC97] border border-[#00EC97]/30 rounded-md transition-colors cursor-pointer"
+              className="px-3 py-1.5 text-xs font-medium bg-emerald-950/50 hover:bg-emerald-900/60 hover:-translate-y-px text-emerald-300 border border-emerald-700/50 rounded-md transition-all cursor-pointer"
             >
               Load Valid $250 Invoice
             </button>
             <button
               type="button"
               onClick={loadPresetMaliciousPromptInjection}
-              className="px-3 py-1.5 text-xs font-medium bg-[#202824] hover:bg-[#28322D] text-[#FF5C68] border border-[#FF5C68]/30 rounded-md transition-colors cursor-pointer"
+              className="px-3 py-1.5 text-xs font-medium bg-rose-950/50 hover:bg-rose-900/60 hover:-translate-y-px text-rose-300 border border-rose-700/50 rounded-md transition-all cursor-pointer"
             >
               Load $10,000 Prompt Injection
             </button>
@@ -196,7 +196,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
           <form onSubmit={handleSubmitAndVerify} className="space-y-3.5 text-xs">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="inv-num" className="block text-[#A7B0AC] mb-1">
+                <label htmlFor="inv-num" className="block text-slate-400 mb-1">
                   Invoice Number
                 </label>
                 <input
@@ -204,19 +204,19 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                   type="text"
                   value={invoiceNumber}
                   onChange={(e) => setInvoiceNumber(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono"
+                  className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="inv-vendor" className="block text-[#A7B0AC] mb-1">
+                <label htmlFor="inv-vendor" className="block text-slate-400 mb-1">
                   Vendor ID
                 </label>
                 <select
                   id="inv-vendor"
                   value={vendorId}
                   onChange={(e) => setVendorId(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono"
+                  className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono cursor-pointer"
                 >
                   {state.vendors.map((v) => (
                     <option key={v.id} value={v.id}>
@@ -230,7 +230,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
 
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label htmlFor="inv-amount" className="block text-[#A7B0AC] mb-1">
+                <label htmlFor="inv-amount" className="block text-slate-400 mb-1">
                   Amount (Decimal)
                 </label>
                 <input
@@ -238,26 +238,26 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                   type="text"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono tabular-nums"
+                  className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono tabular-nums"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="inv-token" className="block text-[#A7B0AC] mb-1">
+                <label htmlFor="inv-token" className="block text-slate-400 mb-1">
                   Token
                 </label>
                 <select
                   id="inv-token"
                   value={requestedToken}
                   onChange={(e) => setRequestedToken(e.target.value as 'USDC' | 'USDT')}
-                  className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono"
+                  className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono cursor-pointer"
                 >
                   <option value="USDC">USDC</option>
                   <option value="USDT">USDT</option>
                 </select>
               </div>
               <div>
-                <label htmlFor="inv-chain" className="block text-[#A7B0AC] mb-1">
+                <label htmlFor="inv-chain" className="block text-slate-400 mb-1">
                   Dest Chain
                 </label>
                 <select
@@ -266,7 +266,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                   onChange={(e) =>
                     setDestinationChain(e.target.value as 'base' | 'arbitrum' | 'near' | 'ethereum')
                   }
-                  className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono"
+                  className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono cursor-pointer"
                 >
                   <option value="base">base</option>
                   <option value="arbitrum">arbitrum</option>
@@ -277,7 +277,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
             </div>
 
             <div>
-              <label htmlFor="inv-wallet" className="block text-[#A7B0AC] mb-1">
+              <label htmlFor="inv-wallet" className="block text-slate-400 mb-1">
                 Destination Recipient Wallet
               </label>
               <input
@@ -285,14 +285,14 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                 type="text"
                 value={destinationWallet}
                 onChange={(e) => setDestinationWallet(e.target.value)}
-                className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono text-xs"
+                className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono text-xs"
                 required
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="inv-po" className="block text-[#A7B0AC] mb-1">
+                <label htmlFor="inv-po" className="block text-slate-400 mb-1">
                   Purchase Order Ref
                 </label>
                 <input
@@ -300,12 +300,12 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                   type="text"
                   value={purchaseOrderRef}
                   onChange={(e) => setPurchaseOrderRef(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono"
+                  className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="inv-deadline" className="block text-[#A7B0AC] mb-1">
+                <label htmlFor="inv-deadline" className="block text-slate-400 mb-1">
                   Payment Deadline
                 </label>
                 <input
@@ -313,14 +313,14 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                   type="text"
                   value={paymentDeadline}
                   onChange={(e) => setPaymentDeadline(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono"
+                  className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="inv-pow" className="block text-[#A7B0AC] mb-1">
+              <label htmlFor="inv-pow" className="block text-slate-400 mb-1">
                 GitHub Proof-of-Work PR URL
               </label>
               <input
@@ -328,13 +328,13 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                 type="text"
                 value={proofOfWorkRef}
                 onChange={(e) => setProofOfWorkRef(e.target.value)}
-                className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono text-xs"
+                className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono text-xs"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="inv-desc" className="block text-[#A7B0AC] mb-1">
+              <label htmlFor="inv-desc" className="block text-slate-400 mb-1">
                 Invoice Description / Untrusted Document Text
               </label>
               <textarea
@@ -342,17 +342,17 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3 py-2 bg-[#0D1210] border border-white/[0.08] rounded-md text-white font-mono text-xs"
+                className="w-full px-3 py-2 bg-[#0E1420] border border-slate-700/80 rounded-md text-white font-mono text-xs"
                 required
               />
             </div>
 
-            <label className="flex items-center gap-2 text-[#A7B0AC] cursor-pointer pt-1">
+            <label className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors cursor-pointer pt-1">
               <input
                 type="checkbox"
                 checked={simulateCompromisedAi}
                 onChange={(e) => setSimulateCompromisedAi(e.target.checked)}
-                className="rounded border-white/[0.08] bg-[#0D1210]"
+                className="rounded border-slate-700 bg-[#0E1420]"
               />
               <span>
                 Test Compromised AI Defense (Force LLM to recommend APPROVE; verify NEAR contract
@@ -361,19 +361,19 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
             </label>
 
             {busyMessage && (
-              <div className="p-3 rounded-md bg-[#0D1210] border border-[#83DCFF]/40 text-[#83DCFF] font-mono">
+              <div className="p-3 rounded-md bg-[#0E1420] border border-sky-500/40 text-sky-300 font-mono">
                 {busyMessage}
               </div>
             )}
             {feedbackError && (
-              <div className="p-3 rounded-md bg-[#0D1210] border border-[#FF5C68]/40 text-[#FF5C68] font-mono flex items-start gap-2">
-                <AlertOctagon className="w-4 h-4 text-[#FF5C68] shrink-0 mt-0.5" />
+              <div className="p-3 rounded-md bg-[#0E1420] border border-rose-500/40 text-rose-300 font-mono flex items-start gap-2">
+                <AlertOctagon className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                 <span>{feedbackError}</span>
               </div>
             )}
             {feedbackSuccess && (
-              <div className="p-3 rounded-md bg-[#0D1210] border border-[#00EC97]/40 text-[#00EC97] font-mono flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#00EC97] shrink-0 mt-0.5" />
+              <div className="p-3 rounded-md bg-[#0E1420] border border-emerald-500/40 text-emerald-300 font-mono flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <span>{feedbackSuccess}</span>
               </div>
             )}
@@ -381,7 +381,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
             <button
               type="submit"
               disabled={Boolean(busyMessage)}
-              className="w-full py-2.5 px-4 bg-[#00EC97] hover:bg-[#70FFC5] disabled:opacity-50 text-[#080B0A] font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              className="vg-btn-primary w-full py-2.5 px-4 disabled:opacity-50 font-semibold rounded-lg flex items-center justify-center gap-2 cursor-pointer"
             >
               <Play className="w-4 h-4 fill-current" />
               Submit, Verify & Authorize on NEAR
@@ -392,17 +392,17 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
         {/* Right Column: Deep Cryptographic Verification & Policy Pipeline Inspector */}
         <div className="lg:col-span-7 space-y-6">
           {/* Selector Strip */}
-          <div className="bg-[#171D1B] border border-white/[0.08] rounded-lg p-4 flex flex-wrap items-center justify-between gap-3">
-            <div className="text-xs text-[#A7B0AC] font-medium">Select Invoice to Inspect:</div>
+          <div className="vg-card p-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="text-xs text-slate-400 font-medium">Select Invoice to Inspect:</div>
             <div className="flex flex-wrap gap-2">
               {state.invoices.map((inv) => (
                 <button
                   key={inv.id}
                   onClick={() => onSelectInvoice(inv.id)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-mono transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all cursor-pointer ${
                     activeInvoice?.id === inv.id
-                      ? 'bg-[#00EC97] text-[#080B0A] font-semibold'
-                      : 'bg-[#0D1210] text-[#A7B0AC] hover:bg-[#202824] hover:text-white border border-white/[0.08]'
+                      ? 'bg-indigo-500 text-white font-semibold'
+                      : 'bg-[#0E1420] text-slate-300 hover:bg-[#1A243B] hover:text-white border border-slate-800'
                   }`}
                 >
                   {inv.id} (${inv.amountDecimal})
@@ -412,10 +412,10 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
           </div>
 
           {activeInvoice ? (
-            <div className="bg-[#171D1B] border border-white/[0.08] rounded-lg p-6 space-y-6">
-              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-white/[0.08] pb-4">
+            <div className="vg-card p-6 space-y-6">
+              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800/80 pb-4">
                 <div>
-                  <div className="text-xs font-mono text-[#A7B0AC]">
+                  <div className="text-xs font-mono text-slate-400">
                     {activeInvoice.id} · {activeInvoice.invoiceNumber} · Vendor:{' '}
                     {activeInvoice.vendorId}
                   </div>
@@ -423,7 +423,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                     ${activeInvoice.amountDecimal} {activeInvoice.requestedToken} →{' '}
                     {activeInvoice.destinationChain.toUpperCase()}
                   </h3>
-                  <div className="text-xs font-mono text-[#727D77] mt-1 break-all">
+                  <div className="text-xs font-mono text-slate-500 mt-1 break-all">
                     SHA-256 Invoice Hash: {activeInvoice.invoiceHash}
                   </div>
                 </div>
@@ -431,7 +431,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                   {activeInvoice.state === 'RESERVED' && (
                     <button
                       onClick={() => onNavigate('settlements')}
-                      className="px-3.5 py-2 bg-[#00EC97] hover:bg-[#70FFC5] text-[#080B0A] font-semibold text-xs rounded-lg cursor-pointer"
+                      className="vg-btn-primary px-3.5 py-2 font-semibold text-xs rounded-lg cursor-pointer"
                     >
                       Settle via NEAR Intents →
                     </button>
@@ -439,7 +439,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                   {activeInvoice.state === 'SUBMITTED' && (
                     <button
                       onClick={() => handleRunAuthorizeOnExisting(activeInvoice)}
-                      className="px-3.5 py-2 bg-[#00EC97] hover:bg-[#70FFC5] text-[#080B0A] font-semibold text-xs rounded-lg cursor-pointer"
+                      className="vg-btn-primary px-3.5 py-2 font-semibold text-xs rounded-lg cursor-pointer"
                     >
                       Verify & Authorize
                     </button>
@@ -448,17 +448,17 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
               </div>
 
               {/* Step 1: Untrusted Content & AI Extraction */}
-              <div className="space-y-2 border-b border-white/[0.08] pb-4">
+              <div className="space-y-2 border-b border-slate-800/80 pb-4">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-semibold text-white flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-[#00EC97]" />
+                    <FileText className="w-3.5 h-3.5 text-indigo-400" />
                     Step 1 & 2: Confidential AI Extraction & Prompt Injection Defense
                   </span>
-                  <span className="font-mono text-[#727D77]">
+                  <span className="font-mono text-slate-500">
                     Provider: {activeInvoice.aiVerification?.inference_provider || 'pending'}
                   </span>
                 </div>
-                <div className="font-mono text-xs text-[#A7B0AC] space-y-1.5 pt-1">
+                <div className="font-mono text-xs text-slate-300 space-y-1.5 pt-1">
                   <div>Description: &ldquo;{activeInvoice.description}&rdquo;</div>
                   {activeInvoice.aiVerification && (
                     <div className="space-y-1 pt-1">
@@ -467,8 +467,8 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                         <span
                           className={
                             activeInvoice.aiVerification.recommendation === 'APPROVE'
-                              ? 'text-[#00EC97] font-semibold'
-                              : 'text-[#FF5C68] font-semibold'
+                              ? 'text-emerald-400 font-semibold'
+                              : 'text-rose-400 font-semibold'
                           }
                         >
                           {activeInvoice.aiVerification.recommendation}
@@ -477,39 +477,41 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                         <span
                           className={
                             activeInvoice.aiVerification.prompt_injection_detected
-                              ? 'text-[#FF5C68] font-semibold'
-                              : 'text-[#00EC97]'
+                              ? 'text-rose-400 font-semibold'
+                              : 'text-emerald-400'
                           }
                         >
                           {String(activeInvoice.aiVerification.prompt_injection_detected)}
                         </span>
                       </div>
                       {activeInvoice.aiVerification.risk_flags.length > 0 && (
-                        <div className="text-[#FF5C68]">
+                        <div className="text-rose-400">
                           Risk Flags: {activeInvoice.aiVerification.risk_flags.join(' · ')}
                         </div>
                       )}
-                      <div className="text-[#727D77]">{activeInvoice.aiVerification.reasoning}</div>
+                      <div className="text-slate-400">{activeInvoice.aiVerification.reasoning}</div>
                     </div>
                   )}
                 </div>
               </div>
 
               {/* Step 2: Independent GitHub Proof-of-Work */}
-              <div className="space-y-2 border-b border-white/[0.08] pb-4">
+              <div className="space-y-2 border-b border-slate-800/80 pb-4">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-semibold text-white">
                     Step 3: Independent GitHub Proof-of-Work Verification
                   </span>
-                  <span className="font-mono text-[#727D77]">
+                  <span className="font-mono text-slate-500">
                     PO: {activeInvoice.purchaseOrderRef}
                   </span>
                 </div>
                 <div className="font-mono text-xs space-y-1 pt-1">
-                  <div className="text-[#A7B0AC] break-all">PR URL: {activeInvoice.proofOfWorkRef}</div>
+                  <div className="text-slate-300 break-all">
+                    PR URL: {activeInvoice.proofOfWorkRef}
+                  </div>
                   {activeInvoice.evidenceVerification ? (
                     <>
-                      <div className="text-[#727D77]">
+                      <div className="text-slate-400">
                         Merged: {String(activeInvoice.evidenceVerification.merged)} · Commit:{' '}
                         {activeInvoice.evidenceVerification.mergeCommitSha || 'none'} · PO Match:{' '}
                         {String(activeInvoice.evidenceVerification.matchesPurchaseOrder)}
@@ -517,15 +519,15 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                       <div
                         className={
                           activeInvoice.evidenceVerification.verified
-                            ? 'text-[#00EC97]'
-                            : 'text-[#FF5C68]'
+                            ? 'text-emerald-400'
+                            : 'text-rose-400'
                         }
                       >
                         {activeInvoice.evidenceVerification.details}
                       </div>
                     </>
                   ) : (
-                    <div className="text-[#727D77]">
+                    <div className="text-slate-500">
                       Not yet verified (or blocked prior to PoW check)
                     </div>
                   )}
@@ -533,17 +535,17 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
               </div>
 
               {/* Step 3: Canonical Ed25519 Cryptographic Attestation */}
-              <div className="space-y-2 border-b border-white/[0.08] pb-4">
+              <div className="space-y-2 border-b border-slate-800/80 pb-4">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-semibold text-white">
                     Step 4: Canonical Ed25519 Verifier Attestation
                   </span>
-                  <span className="font-mono text-[#727D77]">
+                  <span className="font-mono text-slate-500">
                     Domain: VAULTGUARD_ATTESTATION_V1
                   </span>
                 </div>
                 {activeInvoice.attestation ? (
-                  <div className="font-mono text-xs space-y-1 text-[#A7B0AC] break-all pt-1">
+                  <div className="font-mono text-xs space-y-1 text-slate-300 break-all pt-1">
                     <div>Nonce: {activeInvoice.attestation.payload.nonce}</div>
                     <div>
                       Signer Public Key: ed25519:{activeInvoice.attestation.signer_public_key_hex}
@@ -551,7 +553,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                     <div>
                       Ed25519 Signature: {activeInvoice.attestation.signature_hex.slice(0, 64)}...
                     </div>
-                    <div className="text-[#727D77]">
+                    <div className="text-slate-400">
                       Evidence Source: {activeInvoice.attestation.payload.evidence_source} ·
                       Hardware TEE Claim:{' '}
                       {String(activeInvoice.attestation.payload.tee_hardware_verified)} (Honest
@@ -559,7 +561,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="font-mono text-xs text-[#727D77] pt-1">
+                  <div className="font-mono text-xs text-slate-500 pt-1">
                     No attestation issued for rejected/unverified invoice.
                   </div>
                 )}
@@ -571,33 +573,33 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({
                   <span className="font-semibold text-white">
                     Step 5: Onchain NEAR Policy Contract Enforcement
                   </span>
-                  <span className="font-mono text-[#727D77]">
+                  <span className="font-mono text-slate-500">
                     Contract: {state.policy.policyContractAccount}
                   </span>
                 </div>
                 {activeInvoice.state === 'REJECTED' ? (
                   <div className="font-mono text-xs space-y-1 pt-1">
-                    <div className="text-[#FF5C68] font-bold flex items-center gap-1.5">
+                    <div className="text-rose-400 font-bold flex items-center gap-1.5">
                       <ShieldAlert className="w-4 h-4" />
                       ONCHAIN AUTHORIZATION BLOCKED: {activeInvoice.rejectionCode}
                     </div>
-                    <div className="text-[#A7B0AC]">{activeInvoice.rejectionReason}</div>
-                    <div className="text-[#727D77] pt-1">
+                    <div className="text-slate-300">{activeInvoice.rejectionReason}</div>
+                    <div className="text-slate-500 pt-1">
                       Treasury funds transferred: 0 · Reservation issued: NONE
                     </div>
                   </div>
                 ) : (
                   <div className="font-mono text-xs space-y-1 pt-1">
-                    <div className="text-[#00EC97] font-bold flex items-center gap-1.5">
+                    <div className="text-emerald-400 font-bold flex items-center gap-1.5">
                       <ShieldCheck className="w-4 h-4" />
                       ONCHAIN STATUS: {activeInvoice.state}
                     </div>
-                    <div className="text-[#A7B0AC]">
+                    <div className="text-slate-300">
                       Reservation ID: {activeInvoice.reservationId || 'N/A'} · Base Units:{' '}
                       {activeInvoice.amountBaseUnits}
                     </div>
                     {activeInvoice.settlementId && (
-                      <div className="text-[#83DCFF] flex items-center gap-1 pt-1">
+                      <div className="text-sky-400 flex items-center gap-1 pt-1">
                         <Lock className="w-3.5 h-3.5" /> Settlement ID: {activeInvoice.settlementId}
                       </div>
                     )}

@@ -1,35 +1,34 @@
 flowchart TB
-  subgraph Boundary1["Boundary 1: Untrusted External Input Zone"]
-    U1["Vendor PDF / JSON Invoice"]
-    U2["Untrusted Description & Prompt Injection Text"]
-    U3["External GitHub PR URL"]
+  subgraph Untrusted["Zone 1: Untrusted External Input"]
+    InvoicePDF["Vendor Invoice PDF / JSON<br/>(May contain prompt injections)"]
+    FakePR["External GitHub PR URL<br/>(May be unmerged / mismatched)"]
+    SpoofedTx["External Destination Tx Hash<br/>(May be spoofed / underpaid)"]
   end
 
-  subgraph Boundary2["Boundary 2: Offchain Verification & Attestation Zone"]
-    V1["AES-256-GCM Document Encryption at Rest"]
-    V2["Prompt Injection Isolation (<UNTRUSTED_INVOICE_DOCUMENT>)"]
-    V3["Independent GitHub PR Merge & PO Matcher"]
-    V4["Canonical Ed25519 Attestation Signer\n(Recommendations Only — Cannot Move Funds)"]
+  subgraph Advisory["Zone 2: Advisory Analysis & Evidence Collectors"]
+    AI["NEAR AI Cloud Verifier<br/>(Advisory Recommendation Only)"]
+    GH["GitHub Evidence Inspector<br/>(Independent Merge & Commit Check)"]
+    Attest["Ed25519 Attestation Signer<br/>(Canonical Payload + Nonce)"]
   end
 
-  subgraph Boundary3["Boundary 3: Restricted Agent Execution Zone"]
-    A1["ai-executor.vaultguard.testnet"]
-    A2["NEAR Function Call Key\nReceiver: policy-guard.vaultguard.testnet\nMethods: authorize_invoice, reserve_spending, confirm_settlement, mark_settlement_failed\nAllowance: 0.25 NEAR Gas Only (0 Transfer)"]
+  subgraph RestrictedExec["Zone 3: Restricted Executor & Policy Layer"]
+    Policy["Deterministic Policy Engine<br/>(Hard Spending Caps & Whitelists)"]
+    FCKey["Restricted Function Call Key<br/>(0 NEAR Transfer Allowance)"]
+    Intents["NEAR Intents 1Click Orchestrator<br/>(RPC-Verified Destination Tx)"]
   end
 
-  subgraph Boundary4["Boundary 4: Onchain Policy Authority Zone"]
-    P1["policy-guard.vaultguard.testnet (NEAR Smart Contract)"]
-    P2["Enforces: Ed25519 Sig, Nonce Uniqueness, $500 Invoice Cap,\n$2,000 Daily Cap, Active Vendor & Wallet Whitelist, Emergency Pause"]
-    P3["Issues: Atomic SpendingReservation + BoundedTreasuryAuthorization"]
+  subgraph OnChain["Zone 4: Authoritative On-Chain Custody & Enforcement"]
+    Contract["VaultGuard Rust Smart Contract<br/>(Final Authority & Replay Guard)"]
+    Vault["NEAR Treasury Custody Account<br/>(Holds Actual Token Balances)"]
   end
 
-  subgraph Boundary5["Boundary 5: Treasury Asset Custody & Settlement Zone"]
-    C1["treasury-custody.vaultguard.testnet (Holds USDC / USDT)"]
-    C2["1Click Quote & Deposit Validator (Exact Recipient, Asset, Chain, Slippage <= 50 bps)"]
-    C3["Independent Destination Tx Verifier (Required Before Reservation -> CONSUMED)"]
-  end
-
-  Boundary1 -->|"Sanitized & Hashed"| Boundary2
-  Boundary2 -->|"SignedAttestation"| Boundary3
-  Boundary3 -->|"Restricted Contract Call"| Boundary4
-  Boundary4 -->|"Bounded Authorization"| Boundary5
+  InvoicePDF -->|Sanitized Delimiters| AI
+  FakePR -->|REST Verification| GH
+  AI & GH -->|Canonical Hash| Attest
+  Attest -->|Ed25519 Signature| Policy
+  Policy -->|Method-Scoped Call| FCKey
+  FCKey -->|authorize_invoice_payment| Contract
+  Contract -->|Reservation Token| Intents
+  SpoofedTx -->|RPC Receipt Check| Intents
+  Intents -->|mark_settlement_completed| Contract
+  Contract <-->|Authorized Release Only| Vault

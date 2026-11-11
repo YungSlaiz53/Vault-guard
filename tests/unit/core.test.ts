@@ -13,6 +13,7 @@ import {
 } from '../../packages/policy-engine/signatures';
 import { evaluateSpendingLimits } from '../../packages/policy-engine/limits';
 import { decryptDocumentAtRest, encryptDocumentAtRest } from '../../packages/evidence/document-integrity';
+import { VaultGuardRepository } from '../../packages/database/repositories';
 
 test('Pure integer base-unit financial conversions without floating-point errors', () => {
   assert.equal(parseDecimalToBaseUnits('250.00', 6), '250000000');
@@ -90,4 +91,37 @@ test('AES-256-GCM confidential document encryption at rest round-trip', () => {
   assert.notEqual(encrypted, secretDoc);
   const decrypted = decryptDocumentAtRest(encrypted);
   assert.equal(decrypted, secretDoc);
+});
+
+test('Unified login for ADMIN01 (1234567890), operators, and user registration', () => {
+  const repo = new VaultGuardRepository({ persistencePath: null, skipSeed: true });
+
+  // 1. Standard operator login succeeds
+  const op = repo.authenticateUser('operator@vaultguard.near', 'Operator2026!');
+  assert.equal(op.accountId, 'operator.vaultguard.testnet');
+  assert.equal(op.role, 'FINANCE_OPERATOR');
+
+  // 2. ADMIN01 login succeeds through normal login with password 1234567890
+  const admin = repo.authenticateUser('ADMIN01', '1234567890');
+  assert.equal(admin.accountId, 'admin.vaultguard.testnet');
+  assert.equal(admin.role, 'TREASURY_ADMIN');
+  assert.equal(admin.isAdminPortal, true);
+
+  // 3. Invalid password for ADMIN01 is rejected
+  assert.throws(
+    () => repo.authenticateUser('ADMIN01', 'wrong-password'),
+    /Invalid/
+  );
+
+  // 4. User registration creates a new operator account and authenticates
+  const created = repo.registerUser({
+    name: 'Liam Novak',
+    email: 'liam@vaultguard.near',
+    accountId: 'liam.vaultguard.testnet',
+    password: 'LiamPassword2026!',
+    role: 'FINANCE_OPERATOR',
+  });
+  assert.equal(created.accountId, 'liam.vaultguard.testnet');
+  const loggedIn = repo.authenticateUser('liam@vaultguard.near', 'LiamPassword2026!');
+  assert.equal(loggedIn.id, created.id);
 });

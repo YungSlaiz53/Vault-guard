@@ -1,18 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ArrowRightLeft,
+  Calendar,
   FileCheck2,
   FileText,
   Landmark,
   LayoutDashboard,
-  Play,
+  LogOut,
+  Menu,
   Settings,
   Shield,
   Sliders,
   Users,
-  Wallet,
+  X,
 } from 'lucide-react';
 import { AuditView } from './components/AuditView';
+import { AuthViews } from './components/AuthViews';
+import { CosmicHeroStage, formatFullLiveDate } from './components/CosmicHeroStage';
 import { DemoWalkthroughModal } from './components/DemoWalkthroughModal';
 import { InvoicesView } from './components/InvoicesView';
 import { OverviewView } from './components/OverviewView';
@@ -22,7 +26,13 @@ import { SettingsView } from './components/SettingsView';
 import { SettlementsView } from './components/SettlementsView';
 import { TreasuryView } from './components/TreasuryView';
 import { VendorsView } from './components/VendorsView';
-import { ActiveTab, apiRequest, AppStateBundle } from './types/api';
+import {
+  ActiveTab,
+  apiRequest,
+  AppStateBundle,
+  AuthenticatedUser,
+  AuthModalView,
+} from './types/api';
 
 const NAV_ITEMS: Array<{ id: ActiveTab; label: string; icon: React.FC<{ className?: string }> }> = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -40,9 +50,21 @@ export function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>('INV-001');
   const [callerAccount, setCallerAccount] = useState<string>('admin.vaultguard.testnet');
+  const [currentUser, setCurrentUser] = useState<AuthenticatedUser | null>(null);
+  const [authModal, setAuthModal] = useState<AuthModalView>('none');
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [demoModalOpen, setDemoModalOpen] = useState(false);
   const [state, setState] = useState<AppStateBundle | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [liveDate, setLiveDate] = useState<Date>(() => new Date());
+
+  // Keep live date synced across the entire application
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setLiveDate(new Date());
+    }, 30_000);
+    return () => clearInterval(timer);
+  }, []);
 
   const fetchFullState = useCallback(async () => {
     try {
@@ -93,192 +115,289 @@ export function App() {
     fetchFullState();
   }, [fetchFullState]);
 
+  const handleAuthenticated = (user: AuthenticatedUser) => {
+    setCurrentUser(user);
+    setCallerAccount(user.accountId);
+    setActiveTab('dashboard');
+    setAuthModal('none');
+  };
+
+  const handleSignOut = () => {
+    setCurrentUser(null);
+    setCallerAccount('admin.vaultguard.testnet');
+    setDrawerOpen(false);
+  };
+
   const activeNavLabel = NAV_ITEMS.find((n) => n.id === activeTab)?.label || 'Dashboard';
 
   return (
-    <div className="min-h-screen bg-[#080B0A] text-white flex flex-col md:flex-row">
-      {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 bg-[#0D1210] border-b md:border-b-0 md:border-r border-white/[0.08] shrink-0 flex flex-col justify-between">
-        <div>
-          <div className="px-6 py-5 border-b border-white/[0.08] flex items-center justify-between">
-            <button
-              onClick={() => setActiveTab('dashboard')}
-              className="text-lg font-bold tracking-tight text-white flex items-center gap-2.5 whitespace-nowrap cursor-pointer"
-            >
-              {/* Custom Shield-Inspired Security Wordmark Icon (White + #00EC97 Mint Accent) */}
+    <div className="min-h-screen bg-[#05020D] text-[#F8F7FF] flex flex-col relative selection:bg-purple-500/30 selection:text-purple-100">
+      {/* Top Cosmic Navigation Bar */}
+      <header className="sticky top-0 z-40 px-4 sm:px-8 py-4 bg-[#05020D]/80 backdrop-blur-xl border-b border-purple-500/15 flex items-center justify-between gap-4">
+        {/* Left: Glowing Purple Constellation Emblem + VaultGuard Wordmark */}
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={() => setActiveTab('dashboard')}
+            className="group flex items-center gap-3 cursor-pointer"
+          >
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500/40 via-purple-800/50 to-[#14072E] border border-purple-400/50 shadow-[0_0_22px_rgba(168,85,247,0.5)] flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
               <svg
-                className="w-6 h-6 shrink-0"
+                className="w-5 h-5"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
               >
-                <path
-                  d="M12 2.25L4.5 5.25V11.25C4.5 16.55 7.68 21.38 12 22.75C16.32 21.38 19.5 16.55 19.5 11.25V5.25L12 2.25Z"
-                  stroke="#FFFFFF"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="8.5"
+                  stroke="#E9D5FF"
+                  strokeWidth="1.4"
+                  strokeDasharray="3 2"
                 />
                 <path
-                  d="M9.25 12.25L11.25 14.25L15.25 9.75"
-                  stroke="#00EC97"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  d="M12 3.5L18.5 8V16L12 20.5L5.5 16V8L12 3.5Z"
+                  stroke="#C084FC"
+                  strokeWidth="1.5"
+                />
+                <circle cx="12" cy="12" r="2.5" fill="#FFFFFF" />
+                <path
+                  d="M12 3.5V9.5M18.5 8L14.2 10.8M18.5 16L14.2 13.2M12 20.5V14.5M5.5 16L9.8 13.2M5.5 8L9.8 10.8"
+                  stroke="#A855F7"
+                  strokeWidth="1.1"
                 />
               </svg>
-              <span>
-                Vault<span className="text-[#00EC97]">Guard</span>
-              </span>
-            </button>
-          </div>
-
-          <nav aria-label="Main workspace navigation" className="p-3 space-y-1">
-            {NAV_ITEMS.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap cursor-pointer ${
-                    isActive
-                      ? 'bg-[#202824] text-[#00EC97] border border-[#00EC97]/30 font-semibold'
-                      : 'text-[#A7B0AC] hover:text-white hover:bg-[#171D1B]'
-                  }`}
-                >
-                  <Icon
-                    className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#00EC97]' : 'text-[#727D77]'}`}
-                  />
-                  <span className="truncate">{item.label}</span>
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* Bottom Wallet / Role Context Switcher */}
-        <div className="p-4 border-t border-white/[0.08] space-y-2 text-xs">
-          <label htmlFor="near-wallet-role" className="flex items-center gap-1.5 text-[#A7B0AC]">
-            <Wallet className="w-3.5 h-3.5 text-[#00EC97]" />
-            <span>NEAR Wallet Session Role</span>
-          </label>
-          <select
-            id="near-wallet-role"
-            value={callerAccount}
-            onChange={(e) => setCallerAccount(e.target.value)}
-            className="w-full px-2.5 py-2 bg-[#171D1B] border border-white/[0.08] rounded-md text-white font-mono text-[11px]"
-          >
-            <option value="admin.vaultguard.testnet">
-              admin.vaultguard.testnet (TREASURY_ADMIN)
-            </option>
-            <option value="ai-executor.vaultguard.testnet">
-              ai-executor.vaultguard.testnet (AI_AGENT)
-            </option>
-            <option value="operator.vaultguard.testnet">
-              operator.vaultguard.testnet (OPERATOR)
-            </option>
-            <option value="auditor.vaultguard.testnet">
-              auditor.vaultguard.testnet (AUDITOR)
-            </option>
-          </select>
-        </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Bar Contract: Breadcrumb on Left, 1 Primary Action on Right */}
-        <header className="px-6 py-4 bg-[#0D1210] border-b border-white/[0.08] flex items-center justify-between gap-8">
-          <div className="text-xs font-mono text-[#A7B0AC] truncate">
-            VaultGuard Treasury / <span className="text-white">{activeNavLabel}</span>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
-            <button
-              onClick={() => setDemoModalOpen(true)}
-              className="px-3.5 py-2 bg-[#00EC97] hover:bg-[#70FFC5] text-[#080B0A] font-semibold text-xs rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
-            >
-              <Play className="w-3.5 h-3.5 fill-current" />
-              60s Guided Demo
-            </button>
-          </div>
-        </header>
-
-        {/* Main Viewport */}
-        <main className="flex-1 p-6 max-w-7xl w-full mx-auto">
-          {loadError ? (
-            <div className="p-6 bg-[#171D1B] border border-[#FF5C68]/40 rounded-lg text-[#FF5C68] text-sm font-mono">
-              Error loading application state: {loadError}
             </div>
-          ) : !state ? (
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((n) => (
-                <div
-                  key={n}
-                  className="h-28 bg-[#171D1B] border border-white/[0.08] rounded-lg animate-pulse"
-                />
-              ))}
+            <span className="text-base sm:text-lg font-semibold tracking-tight text-white">
+              VaultGuard
+            </span>
+          </button>
+
+          {currentUser && (
+            <span className="hidden lg:inline-flex items-center gap-2 text-xs font-mono text-purple-300/80 pl-3 border-l border-purple-400/20">
+              <Calendar className="w-3.5 h-3.5 text-purple-400" />
+              <span>{formatFullLiveDate(liveDate)}</span>
+              <span className="text-purple-400/40">·</span>
+              <span className="text-purple-200 font-semibold">{activeNavLabel}</span>
+            </span>
+          )}
+        </div>
+
+        {/* Right: Login & Sign up (when logged out) OR Active User Session (when logged in) */}
+        <div className="flex items-center gap-2.5 sm:gap-3.5">
+          {currentUser ? (
+            <div className="flex items-center gap-2 bg-[#120829] border border-purple-400/35 px-3 py-1.5 rounded-xl text-xs">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  currentUser.isAdminPortal
+                    ? 'bg-fuchsia-400 shadow-[0_0_8px_#E879F9]'
+                    : 'bg-emerald-400 shadow-[0_0_8px_#34D399]'
+                }`}
+              />
+              <span className="font-mono text-purple-100 font-medium truncate max-w-[160px]">
+                {currentUser.name.split(' ')[0]} ({currentUser.accountId})
+              </span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-500/25 text-purple-200">
+                {currentUser.role}
+              </span>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                title="Sign out"
+                aria-label="Sign out"
+                className="text-purple-300 hover:text-white pl-1 cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
             </div>
           ) : (
             <>
-              {activeTab === 'dashboard' && (
-                <OverviewView
-                  state={state}
-                  onNavigate={setActiveTab}
-                  onOpenDemo={() => setDemoModalOpen(true)}
-                  onSelectInvoice={setSelectedInvoiceId}
-                />
-              )}
-              {activeTab === 'invoices' && (
-                <InvoicesView
-                  state={state}
-                  selectedInvoiceId={selectedInvoiceId}
-                  onSelectInvoice={setSelectedInvoiceId}
-                  onRefresh={fetchFullState}
-                  onNavigate={setActiveTab}
-                />
-              )}
-              {activeTab === 'vendors' && (
-                <VendorsView
-                  state={state}
-                  callerAccount={callerAccount}
-                  onRefresh={fetchFullState}
-                />
-              )}
-              {activeTab === 'policies' && (
-                <PoliciesView
-                  state={state}
-                  callerAccount={callerAccount}
-                  onRefresh={fetchFullState}
-                />
-              )}
-              {activeTab === 'treasury' && (
-                <TreasuryView
-                  state={state}
-                  callerAccount={callerAccount}
-                  onRefresh={fetchFullState}
-                />
-              )}
-              {activeTab === 'settlements' && (
-                <SettlementsView state={state} onRefresh={fetchFullState} />
-              )}
-              {activeTab === 'security' && (
-                <SecurityCenterView state={state} onRefresh={fetchFullState} />
-              )}
-              {activeTab === 'audit' && <AuditView state={state} />}
-              {activeTab === 'settings' && (
-                <SettingsView
-                  state={state}
-                  callerAccount={callerAccount}
-                  onChangeCallerAccount={setCallerAccount}
-                  onRefresh={fetchFullState}
-                />
-              )}
+              <button
+                type="button"
+                onClick={() => setAuthModal('login')}
+                className="px-3 py-1.5 text-xs sm:text-sm font-medium text-purple-100/90 hover:text-white transition-colors cursor-pointer"
+              >
+                Login
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setAuthModal('register')}
+                className="px-4 py-2 text-xs sm:text-sm font-medium text-white rounded-xl bg-purple-600/25 hover:bg-purple-600/40 border border-purple-400/40 shadow-[0_0_24px_rgba(147,51,234,0.35)] transition-all cursor-pointer"
+              >
+                Sign up
+              </button>
             </>
           )}
+
+          <button
+            type="button"
+            onClick={() => {
+              if (!currentUser) {
+                setAuthModal('login');
+              } else {
+                setDrawerOpen((prev) => !prev);
+              }
+            }}
+            aria-label="Toggle navigation menu"
+            className="p-2 rounded-xl text-purple-100 hover:text-white hover:bg-purple-500/20 border border-transparent hover:border-purple-400/30 transition-colors cursor-pointer"
+          >
+            {drawerOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </header>
+
+      {/* BEFORE LOGIN: Show ONLY the Reflect-inspired Cosmic Hero Stage with Live Date Calendar */}
+      {!currentUser ? (
+        <main className="flex-1 flex flex-col justify-between">
+          <CosmicHeroStage state={state} onOpenAuth={setAuthModal} />
         </main>
-      </div>
+      ) : (
+        /* AFTER LOGIN: Full Authenticated Dashboard Workspace containing all 9 VaultGuard Modules */
+        <div className="flex-1 flex flex-col md:flex-row min-h-0">
+          {/* Authenticated Sidebar Navigation */}
+          <aside className="w-full md:w-64 bg-[#090418]/90 border-b md:border-b-0 md:border-r border-purple-500/15 shrink-0 flex flex-col justify-between p-4">
+            <div className="space-y-4">
+              {/* Live Date Card inside Authenticated Sidebar */}
+              <div className="p-3.5 rounded-xl bg-[#120829]/90 border border-purple-400/25 space-y-1">
+                <div className="flex items-center justify-between text-[11px] font-mono text-purple-300">
+                  <span>LIVE TREASURY CLOCK</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34D399]" />
+                </div>
+                <div className="text-xs font-semibold text-white">
+                  {formatFullLiveDate(liveDate)}
+                </div>
+                <div className="text-[11px] font-mono text-[#9E93BD] truncate">
+                  {currentUser.accountId}
+                </div>
+              </div>
+
+              <nav aria-label="Main workspace navigation" className="space-y-1">
+                {NAV_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveTab(item.id)}
+                      className={`group w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all duration-150 whitespace-nowrap cursor-pointer ${
+                        isActive
+                          ? 'bg-gradient-to-r from-purple-600/30 to-indigo-600/30 text-white border border-purple-400/45 font-semibold shadow-[0_0_18px_rgba(147,51,234,0.25)]'
+                          : 'text-[#B4A8D4] hover:text-white hover:bg-purple-500/15 hover:translate-x-0.5'
+                      }`}
+                    >
+                      <Icon
+                        className={`w-4 h-4 shrink-0 transition-colors ${
+                          isActive
+                            ? 'text-purple-300'
+                            : 'text-[#8E84AD] group-hover:text-purple-300'
+                        }`}
+                      />
+                      <span className="truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+
+            <div className="pt-4 border-t border-purple-500/15">
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="vg-btn-secondary w-full py-2 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign Out ({currentUser.name.split(' ')[0]})</span>
+              </button>
+            </div>
+          </aside>
+
+          {/* Authenticated Workspace Content Area */}
+          <main className="flex-1 p-6 max-w-7xl w-full mx-auto">
+            {loadError ? (
+              <div className="p-6 bg-rose-950/40 border border-rose-500/40 rounded-xl text-rose-200 text-sm font-mono">
+                Error loading application state: {loadError}
+              </div>
+            ) : !state ? (
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map((n) => (
+                  <div
+                    key={n}
+                    className="h-28 bg-[#120829] border border-purple-500/20 rounded-xl animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : (
+              <>
+                {activeTab === 'dashboard' && (
+                  <OverviewView
+                    state={state}
+                    selectedInvoiceId={selectedInvoiceId}
+                    onNavigate={setActiveTab}
+                    onSelectInvoice={setSelectedInvoiceId}
+                    onRefresh={fetchFullState}
+                    liveDate={liveDate}
+                  />
+                )}
+                {activeTab === 'invoices' && (
+                  <InvoicesView
+                    state={state}
+                    selectedInvoiceId={selectedInvoiceId}
+                    onSelectInvoice={setSelectedInvoiceId}
+                    onRefresh={fetchFullState}
+                    onNavigate={setActiveTab}
+                  />
+                )}
+                {activeTab === 'vendors' && (
+                  <VendorsView
+                    state={state}
+                    callerAccount={callerAccount}
+                    onRefresh={fetchFullState}
+                  />
+                )}
+                {activeTab === 'policies' && (
+                  <PoliciesView
+                    state={state}
+                    callerAccount={callerAccount}
+                    onRefresh={fetchFullState}
+                  />
+                )}
+                {activeTab === 'treasury' && (
+                  <TreasuryView
+                    state={state}
+                    callerAccount={callerAccount}
+                    onRefresh={fetchFullState}
+                  />
+                )}
+                {activeTab === 'settlements' && (
+                  <SettlementsView state={state} onRefresh={fetchFullState} />
+                )}
+                {activeTab === 'security' && (
+                  <SecurityCenterView state={state} onRefresh={fetchFullState} />
+                )}
+                {activeTab === 'audit' && <AuditView state={state} />}
+                {activeTab === 'settings' && (
+                  <SettingsView
+                    state={state}
+                    callerAccount={callerAccount}
+                    onChangeCallerAccount={setCallerAccount}
+                    onRefresh={fetchFullState}
+                  />
+                )}
+              </>
+            )}
+          </main>
+        </div>
+      )}
+
+      {/* Unified Authentication Modal (Login with ADMIN01 / 1234567890 or Operator, and Sign up) */}
+      <AuthViews
+        view={authModal}
+        onChangeView={setAuthModal}
+        onAuthenticated={handleAuthenticated}
+      />
 
       <DemoWalkthroughModal
         isOpen={demoModalOpen}

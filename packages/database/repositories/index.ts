@@ -60,6 +60,26 @@ const DEFAULT_VENDORS: VendorRecord[] = [
   },
 ];
 
+export interface AuthenticatedAccountProfile {
+  id: string;
+  name: string;
+  email: string;
+  accountId: string;
+  role: 'TREASURY_ADMIN' | 'FINANCE_OPERATOR' | 'AI_AGENT' | 'AUDITOR';
+  publicKey: string;
+  isAdminPortal: boolean;
+  lastAuthenticatedAt: string;
+}
+
+interface StoredAccountCredential extends AuthenticatedAccountProfile {
+  passwordHash: string;
+  adminClearanceCode?: string;
+}
+
+function hashPassword(secret: string): string {
+  return crypto.createHash('sha256').update(`vg-salt-2026:${secret}`).digest('hex');
+}
+
 export class VaultGuardRepository {
   public readonly contract: VaultGuardNearContract;
   public readonly settlementOrchestrator: IntentsSettlementOrchestrator;
@@ -67,6 +87,7 @@ export class VaultGuardRepository {
   private auditEvents: AuditEventRecord[] = [];
   private securityEvents: SecurityEventRecord[] = [];
   private users: WalletUserSession[] = [];
+  private credentials: Map<string, StoredAccountCredential> = new Map();
   private persistencePath: string | null;
 
   constructor(options?: { persistencePath?: string | null; skipSeed?: boolean }) {
@@ -78,32 +99,76 @@ export class VaultGuardRepository {
     this.contract = new VaultGuardNearContract(undefined, DEFAULT_VENDORS);
     this.settlementOrchestrator = new IntentsSettlementOrchestrator();
 
+    const now = new Date().toISOString();
     this.users = [
       {
         accountId: 'admin.vaultguard.testnet',
         role: 'TREASURY_ADMIN',
         publicKey: 'ed25519:AdminMasterKey8f9d2a1b4c5e6f708192a3b4c5d6e7f8',
-        lastAuthenticatedAt: new Date().toISOString(),
+        lastAuthenticatedAt: now,
       },
       {
         accountId: 'operator.vaultguard.testnet',
         role: 'FINANCE_OPERATOR',
         publicKey: 'ed25519:OperatorKey3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f',
-        lastAuthenticatedAt: new Date().toISOString(),
+        lastAuthenticatedAt: now,
       },
       {
         accountId: 'ai-executor.vaultguard.testnet',
         role: 'AI_AGENT',
         publicKey: this.contract.getAgentFunctionCallKey().publicKey,
-        lastAuthenticatedAt: new Date().toISOString(),
+        lastAuthenticatedAt: now,
       },
       {
         accountId: 'auditor.vaultguard.testnet',
         role: 'AUDITOR',
         publicKey: 'ed25519:AuditorReadOnlyKey9a8b7c6d5e4f3a2b1c0d9e8f',
-        lastAuthenticatedAt: new Date().toISOString(),
+        lastAuthenticatedAt: now,
       },
     ];
+
+    const seedAccounts: StoredAccountCredential[] = [
+      {
+        id: 'USR-ADMIN-01',
+        name: 'ADMIN01 (Chief Treasury Admin)',
+        email: 'admin01',
+        accountId: 'admin.vaultguard.testnet',
+        role: 'TREASURY_ADMIN',
+        publicKey: 'ed25519:AdminMasterKey8f9d2a1b4c5e6f708192a3b4c5d6e7f8',
+        isAdminPortal: true,
+        lastAuthenticatedAt: now,
+        passwordHash: hashPassword('1234567890'),
+        adminClearanceCode: 'VG-ROOT-9942',
+      },
+      {
+        id: 'USR-OP-01',
+        name: 'Marcus Chen (Finance Operator)',
+        email: 'operator@vaultguard.near',
+        accountId: 'operator.vaultguard.testnet',
+        role: 'FINANCE_OPERATOR',
+        publicKey: 'ed25519:OperatorKey3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f',
+        isAdminPortal: false,
+        lastAuthenticatedAt: now,
+        passwordHash: hashPassword('Operator2026!'),
+      },
+      {
+        id: 'USR-AUD-01',
+        name: 'Sora Takahashi (Security Auditor)',
+        email: 'auditor@vaultguard.near',
+        accountId: 'auditor.vaultguard.testnet',
+        role: 'AUDITOR',
+        publicKey: 'ed25519:AuditorReadOnlyKey9a8b7c6d5e4f3a2b1c0d9e8f',
+        isAdminPortal: false,
+        lastAuthenticatedAt: now,
+        passwordHash: hashPassword('Auditor2026!'),
+      },
+    ];
+
+    for (const acc of seedAccounts) {
+      this.credentials.set(acc.email.toLowerCase(), acc);
+      this.credentials.set(acc.accountId.toLowerCase(), acc);
+    }
+    this.credentials.set('admin01', seedAccounts[0]);
 
     if (!options?.skipSeed) {
       this.seedInitialDemoData();
@@ -664,6 +729,114 @@ export class VaultGuardRepository {
 
   public getUsers(): WalletUserSession[] {
     return [...this.users];
+  }
+
+  public authenticateUser(identifier: string, password: string): AuthenticatedAccountProfile {
+    const cleanId = identifier.trim().toLowerCase();
+    const record = this.credentials.get(cleanId);
+    if (!record || record.passwordHash !== hashPassword(password)) {
+      throw new VaultGuardError(
+        ErrorCode.ERR_UNAUTHORIZED_AGENT,
+        'Invalid username, email, NEAR account ID, or password.',
+        401
+      );
+    }
+    record.lastAuthenticatedAt = new Date().toISOString();
+    const { passwordHash: _ph, adminClearanceCode: _ac, ...profile } = record;
+    return profile;
+  }
+
+  public authenticateAdmin(params: {
+    identifier: string;
+    password: string;
+    clearanceCode: string;
+  }): AuthenticatedAccountProfile {
+    const cleanId = params.identifier.trim().toLowerCase();
+    const record = this.credentials.get(cleanId);
+    if (!record || !record.isAdminPortal) {
+      this.recordSecurityEvent({
+        category: 'UNAUTHORIZED_KEY_CALL',
+        severity: 'CRITICAL',
+        errorCode: ErrorCode.ERR_UNAUTHORIZED_AGENT,
+        actor: cleanId || 'unknown-actor',
+        description: `Rejected unauthorized attempt to access Admin Vault Portal by non-admin account "${cleanId}".`,
+      });
+      throw new VaultGuardError(
+        ErrorCode.ERR_UNAUTHORIZED_AGENT,
+        'Account is not authorized for Treasury Admin Vault access.',
+        403
+      );
+    }
+    if (
+      record.passwordHash !== hashPassword(params.password) ||
+      record.adminClearanceCode !== params.clearanceCode.trim()
+    ) {
+      this.recordSecurityEvent({
+        category: 'UNAUTHORIZED_KEY_CALL',
+        severity: 'HIGH',
+        errorCode: ErrorCode.ERR_UNAUTHORIZED_AGENT,
+        actor: record.accountId,
+        description: 'Blocked Admin Vault login with invalid master passphrase or hardware clearance code.',
+      });
+      throw new VaultGuardError(
+        ErrorCode.ERR_UNAUTHORIZED_AGENT,
+        'Invalid Admin Master Passphrase or Hardware Clearance Code.',
+        401
+      );
+    }
+    record.lastAuthenticatedAt = new Date().toISOString();
+    const { passwordHash: _ph, adminClearanceCode: _ac, ...profile } = record;
+    return profile;
+  }
+
+  public registerUser(params: {
+    name: string;
+    email: string;
+    accountId: string;
+    password: string;
+    role?: 'FINANCE_OPERATOR' | 'AUDITOR';
+  }): AuthenticatedAccountProfile {
+    const cleanEmail = params.email.trim().toLowerCase();
+    const cleanAccount = params.accountId.trim().toLowerCase();
+    if (!cleanEmail || !cleanAccount || params.password.length < 6) {
+      throw new VaultGuardError(
+        ErrorCode.ERR_INVALID_INVOICE,
+        'Name, email, NEAR account ID, and a password of at least 6 characters are required.',
+        400
+      );
+    }
+    if (this.credentials.has(cleanEmail) || this.credentials.has(cleanAccount)) {
+      throw new VaultGuardError(
+        ErrorCode.ERR_DUPLICATE_INVOICE,
+        `Account "${cleanAccount}" or email "${cleanEmail}" is already registered.`,
+        409
+      );
+    }
+    const now = new Date().toISOString();
+    const role = params.role === 'AUDITOR' ? 'AUDITOR' : 'FINANCE_OPERATOR';
+    const pubKey = `ed25519:${crypto.randomBytes(16).toString('hex')}`;
+    const newCred: StoredAccountCredential = {
+      id: `USR-${String(this.users.length + 1).padStart(3, '0')}`,
+      name: params.name.trim(),
+      email: cleanEmail,
+      accountId: cleanAccount,
+      role,
+      publicKey: pubKey,
+      isAdminPortal: false,
+      lastAuthenticatedAt: now,
+      passwordHash: hashPassword(params.password),
+    };
+    this.credentials.set(cleanEmail, newCred);
+    this.credentials.set(cleanAccount, newCred);
+    this.users.push({
+      accountId: cleanAccount,
+      role,
+      publicKey: pubKey,
+      lastAuthenticatedAt: now,
+    });
+    this.persistSnapshot();
+    const { passwordHash: _ph, adminClearanceCode: _ac, ...profile } = newCred;
+    return profile;
   }
 
   public recordAuditEvent(

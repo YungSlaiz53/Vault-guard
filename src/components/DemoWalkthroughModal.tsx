@@ -182,12 +182,12 @@ export const DemoWalkthroughModal: React.FC<DemoWalkthroughModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="demo-modal-title"
-      className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
     >
-      <div className="bg-[#171D1B] border border-white/[0.08] rounded-xl max-w-3xl w-full p-6 space-y-5 shadow-2xl">
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+      <div className="bg-[#131B2E] border border-slate-800/80 rounded-xl max-w-3xl w-full p-6 space-y-5 shadow-2xl">
+        <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
           <div>
-            <div className="text-xs font-mono text-[#00EC97]">
+            <div className="text-xs font-mono text-indigo-400">
               REPRODUCIBLE 60-SECOND HACKATHON DEMONSTRATION
             </div>
             <h2 id="demo-modal-title" className="text-lg font-bold text-white">
@@ -197,40 +197,43 @@ export const DemoWalkthroughModal: React.FC<DemoWalkthroughModalProps> = ({
           <button
             onClick={onClose}
             aria-label="Close demonstration modal"
-            className="p-1.5 text-[#A7B0AC] hover:text-white rounded-lg cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-white hover:bg-[#19233A] rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="divide-y divide-white/[0.08] max-h-[60vh] overflow-y-auto pr-1">
+        <div className="divide-y divide-slate-800/70 max-h-[60vh] overflow-y-auto pr-1">
           {steps.map((s, idx) => (
-            <div key={idx} className="py-3.5 first:pt-0 last:pb-0 space-y-1.5">
+            <div
+              key={idx}
+              className="py-3.5 first:pt-0 last:pb-0 space-y-1.5 hover:bg-[#19233A]/40 px-2 rounded transition-colors"
+            >
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-[#00EC97] font-semibold">
+                <span className="text-indigo-300 font-semibold">
                   [{s.timeRange}] {s.title}
                 </span>
                 <span
                   className={
                     s.status === 'DONE'
-                      ? 'text-[#00EC97] font-semibold flex items-center gap-1'
+                      ? 'text-emerald-400 font-semibold flex items-center gap-1'
                       : s.status === 'RUNNING'
-                        ? 'text-[#F5B942]'
-                        : 'text-[#727D77]'
+                        ? 'text-amber-400'
+                        : 'text-slate-500'
                   }
                 >
                   {s.status === 'DONE' && <CheckCircle2 className="w-3.5 h-3.5" />}
                   {s.status}
                 </span>
               </div>
-              <p className="text-xs text-[#A7B0AC] italic">{s.narration}</p>
+              <p className="text-xs text-slate-400 italic">{s.narration}</p>
               <div
                 className={`text-xs font-mono pt-1 ${
                   s.outcome.includes('BLOCKED')
-                    ? 'text-[#FF5C68] font-semibold flex items-center gap-1'
+                    ? 'text-rose-400 font-semibold flex items-center gap-1'
                     : s.status === 'DONE'
-                      ? 'text-[#70FFC5]'
-                      : 'text-[#727D77]'
+                      ? 'text-emerald-300'
+                      : 'text-slate-500'
                 }`}
               >
                 {s.outcome.includes('BLOCKED') && <ShieldAlert className="w-3.5 h-3.5 shrink-0" />}
@@ -240,22 +243,22 @@ export const DemoWalkthroughModal: React.FC<DemoWalkthroughModalProps> = ({
           ))}
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
-          <div className="text-xs text-[#A7B0AC] font-mono">
+        <div className="flex items-center justify-between pt-4 border-t border-slate-800/80">
+          <div className="text-xs text-slate-400 font-mono">
             Executes real backend state transitions & updates dashboard live.
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={executeLive60sDemo}
               disabled={running}
-              className="px-4 py-2 bg-[#00EC97] hover:bg-[#70FFC5] text-[#080B0A] font-semibold text-xs rounded-lg flex items-center gap-2 cursor-pointer"
+              className="vg-btn-primary px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-xs rounded-lg flex items-center gap-2 cursor-pointer shadow-sm shadow-indigo-950/50"
             >
               <Play className="w-4 h-4 fill-current" />
               {running ? 'Running Live Demo...' : 'Execute All 5 Stages Now'}
             </button>
             <button
               onClick={onClose}
-              className="px-4 py-2 bg-[#202824] hover:bg-[#28322D] text-white border border-white/[0.08] text-xs font-medium rounded-lg cursor-pointer"
+              className="vg-btn-secondary px-4 py-2 bg-[#1A243B] hover:bg-[#222F4D] text-white border border-slate-700/70 text-xs font-medium rounded-lg cursor-pointer"
             >
               Done
             </button>

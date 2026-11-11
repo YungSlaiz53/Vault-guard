@@ -32,48 +32,48 @@ export const TreasuryView: React.FC<TreasuryViewProps> = ({ state, callerAccount
   return (
     <div className="space-y-8">
       {/* Custody Separation Matrix */}
-      <div className="bg-[#171D1B] border border-white/[0.08] rounded-lg p-6 space-y-5">
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+      <div className="vg-card p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
           <div>
             <h2 className="text-base font-semibold text-white">
               Four-Layer Treasury Custody & Authorization Separation
             </h2>
-            <p className="text-xs text-[#A7B0AC]">
+            <p className="text-xs text-slate-400">
               VaultGuard strictly separates policy evaluation, asset custody, restricted execution,
               and destination settlement verification.
             </p>
           </div>
-          <Landmark className="w-5 h-5 text-[#00EC97]" />
+          <Landmark className="w-5 h-5 text-indigo-400" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-xs font-mono divide-y md:divide-y-0 md:divide-x divide-white/[0.08]">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-xs font-mono divide-y md:divide-y-0 md:divide-x divide-slate-800/80">
           <div className="pt-3 md:pt-0 md:pr-4 space-y-1.5">
-            <div className="text-[#83DCFF] font-semibold">1. Policy Authority</div>
+            <div className="text-sky-400 font-semibold">1. Policy Authority</div>
             <div className="text-white break-all">{state.policy.policyContractAccount}</div>
-            <div className="text-[#A7B0AC] font-sans leading-relaxed">
+            <div className="text-slate-400 font-sans leading-relaxed">
               Verifies Ed25519 attestations & issues bounded reservations. Holds 0 fungible tokens.
             </div>
           </div>
           <div className="pt-3 md:pt-0 md:px-4 space-y-1.5">
-            <div className="text-[#00EC97] font-semibold">2. Asset Custody</div>
+            <div className="text-emerald-400 font-semibold">2. Asset Custody</div>
             <div className="text-white break-all">{state.policy.treasuryCustodyAccount}</div>
-            <div className="text-[#A7B0AC] font-sans leading-relaxed">
+            <div className="text-slate-400 font-sans leading-relaxed">
               Holds USDC/USDT reserves. Releases funds ONLY against an active bounded contract
               authorization.
             </div>
           </div>
           <div className="pt-3 md:pt-0 md:px-4 space-y-1.5">
-            <div className="text-[#F5B942] font-semibold">3. Restricted Executor</div>
+            <div className="text-amber-400 font-semibold">3. Restricted Executor</div>
             <div className="text-white break-all">{state.agentFunctionCallKey.accountId}</div>
-            <div className="text-[#A7B0AC] font-sans leading-relaxed">
+            <div className="text-slate-400 font-sans leading-relaxed">
               Uses restricted Function Call Key. Cannot alter recipient, amount, chain, or deposit
               address.
             </div>
           </div>
           <div className="pt-3 md:pt-0 md:pl-4 space-y-1.5">
-            <div className="text-white font-semibold">4. Treasury Admin</div>
+            <div className="text-indigo-400 font-semibold">4. Treasury Admin</div>
             <div className="text-white break-all">{state.policy.treasuryAdminAccount}</div>
-            <div className="text-[#A7B0AC] font-sans leading-relaxed">
+            <div className="text-slate-400 font-sans leading-relaxed">
               Controls vendor registry, policy caps, emergency pause, and mainnet human confirmation.
             </div>
           </div>
@@ -81,35 +81,35 @@ export const TreasuryView: React.FC<TreasuryViewProps> = ({ state, callerAccount
       </div>
 
       {feedback && (
-        <div className="p-3 rounded-lg bg-[#0D1210] border border-[#00EC97]/40 text-[#00EC97] text-xs font-mono">
+        <div className="p-3 rounded-lg bg-[#0E1420] border border-emerald-500/40 text-emerald-300 text-xs font-mono">
           {feedback}
         </div>
       )}
       {errorMsg && (
-        <div className="p-3 rounded-lg bg-[#0D1210] border border-[#FF5C68]/40 text-[#FF5C68] text-xs font-mono">
+        <div className="p-3 rounded-lg bg-[#0E1420] border border-rose-500/40 text-rose-300 text-xs font-mono">
           {errorMsg}
         </div>
       )}
 
       {/* Active & Historical Atomic Spending Reservations */}
-      <div className="bg-[#171D1B] border border-white/[0.08] rounded-lg overflow-hidden">
-        <div className="px-6 py-4 border-b border-white/[0.08] flex items-center justify-between">
+      <div className="vg-card overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-800/80 flex items-center justify-between">
           <div>
             <h2 className="text-base font-semibold text-white">
               Atomic Onchain Spending Reservations
             </h2>
-            <p className="text-xs text-[#A7B0AC]">
+            <p className="text-xs text-slate-400">
               Each reservation locks daily spending capacity atomically to prevent concurrent
               race-condition overspending.
             </p>
           </div>
-          <Lock className="w-4 h-4 text-[#00EC97]" />
+          <Lock className="w-4 h-4 text-indigo-400" />
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/[0.08] text-xs text-[#A7B0AC]">
+              <tr className="border-b border-slate-800/80 text-xs text-slate-400">
                 <th className="py-3 px-4 font-medium">Reservation ID</th>
                 <th className="py-3 px-4 font-medium">Invoice · Vendor</th>
                 <th className="py-3 px-4 font-medium text-right">Amount</th>
@@ -119,30 +119,30 @@ export const TreasuryView: React.FC<TreasuryViewProps> = ({ state, callerAccount
                 <th className="py-3 px-4 font-medium text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.08] text-xs font-mono">
+            <tbody className="divide-y divide-slate-800/70 text-xs font-mono">
               {state.reservations.map((res) => (
-                <tr key={res.reservationId} className="hover:bg-[#202824]/60">
+                <tr key={res.reservationId} className="vg-row-hover">
                   <td className="py-3.5 px-4 text-white whitespace-nowrap">{res.reservationId}</td>
-                  <td className="py-3.5 px-4 text-[#A7B0AC] whitespace-nowrap">
+                  <td className="py-3.5 px-4 text-slate-300 whitespace-nowrap">
                     {res.invoiceId} · {res.vendorId}
                   </td>
                   <td className="py-3.5 px-4 text-right tabular-nums text-white whitespace-nowrap">
                     ${formatBaseUnitsToDecimal(res.amountBaseUnits, 6)} {res.token}
                   </td>
-                  <td className="py-3.5 px-4 text-[#727D77] break-all max-w-[220px]">
+                  <td className="py-3.5 px-4 text-slate-400 break-all max-w-[220px]">
                     {res.recipient} ({res.destinationChain})
                   </td>
-                  <td className="py-3.5 px-4 text-[#727D77] whitespace-nowrap">
+                  <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap">
                     {res.executionNonce}
                   </td>
                   <td className="py-3.5 px-4 whitespace-nowrap">
                     <span
                       className={
                         res.status === 'CONSUMED'
-                          ? 'text-[#00EC97]'
+                          ? 'text-emerald-400'
                           : res.status === 'ACTIVE'
-                            ? 'text-[#F5B942]'
-                            : 'text-[#727D77]'
+                            ? 'text-amber-400'
+                            : 'text-slate-500'
                       }
                     >
                       {res.status}
@@ -152,12 +152,12 @@ export const TreasuryView: React.FC<TreasuryViewProps> = ({ state, callerAccount
                     {res.status === 'ACTIVE' ? (
                       <button
                         onClick={() => handleReleaseReservation(res.reservationId)}
-                        className="px-2.5 py-1 bg-[#202824] hover:bg-[#28322D] text-white rounded border border-white/[0.08] inline-flex items-center gap-1 cursor-pointer"
+                        className="vg-btn-secondary px-2.5 py-1 rounded inline-flex items-center gap-1 cursor-pointer"
                       >
-                        <Unlock className="w-3 h-3 text-[#00EC97]" /> Release
+                        <Unlock className="w-3 h-3 text-indigo-400" /> Release
                       </button>
                     ) : (
-                      <span className="text-[#727D77]">—</span>
+                      <span className="text-slate-500">—</span>
                     )}
                   </td>
                 </tr>

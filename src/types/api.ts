@@ -22,6 +22,19 @@ export type ActiveTab =
   | 'audit'
   | 'settings';
 
+export type AuthModalView = 'none' | 'login' | 'register' | 'admin-login';
+
+export interface AuthenticatedUser {
+  id: string;
+  name: string;
+  email: string;
+  accountId: string;
+  role: 'TREASURY_ADMIN' | 'FINANCE_OPERATOR' | 'AI_AGENT' | 'AUDITOR';
+  publicKey: string;
+  isAdminPortal: boolean;
+  lastAuthenticatedAt: string;
+}
+
 export interface AppStateBundle {
   invoices: InvoiceRecord[];
   vendors: VendorRecord[];
